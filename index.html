@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超長文お気持ち投稿画像メーカー</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>超長文お気持ち投稿画像メーカー</h1>
+        <p>SNSの文字数制限を気にせず、熱いお気持ちを一枚の画像に！</p>
+        <textarea id="text-input" rows="15" placeholder="ここに、あなたの伝えたい文章を貼り付けてください..."></textarea>
+        <button id="generate-btn">画像を出力する</button>
+        <div id="result-area" class="hidden">
+            <h2>完成！</h2>
+            <p>画像を右クリック（または長押し）して保存してください。</p>
+            <img id="output-image" src="" alt="生成された画像">
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
