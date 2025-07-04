@@ -1,0 +1,10 @@
+# VS Codeのワークスペース設定
+.vscode/
+
+# Pythonのキャッシュファイル
+__pycache__/
+*.pyc
+
+# OSが自動生成するファイル
+.DS_Store
+Thumbs.db
