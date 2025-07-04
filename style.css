@@ -6,6 +6,7 @@ body {
     justify-content: center;
     padding: 20px;
 }
+
 .container {
     width: 100%;
     max-width: 800px;
@@ -14,15 +15,18 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
 h1 {
     text-align: center;
     color: #1a237e;
 }
+
 p {
     text-align: center;
     margin-bottom: 20px;
     color: #555;
 }
+
 textarea {
     width: 100%;
     box-sizing: border-box;
@@ -33,6 +37,7 @@ textarea {
     line-height: 1.6;
     margin-bottom: 20px;
 }
+
 button {
     display: block;
     width: 100%;
@@ -46,18 +51,52 @@ button {
     cursor: pointer;
     transition: background-color 0.2s;
 }
+
 button:hover {
     background-color: #218838;
 }
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: end;
+}
+
+.controls-grid div {
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-grid label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.controls-grid select,
+.controls-grid input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    height: 40px;
+}
+
 #result-area {
     margin-top: 30px;
     text-align: center;
 }
+
 #output-image {
     max-width: 100%;
     border: 1px solid #ddd;
     margin-top: 15px;
 }
+
 .hidden {
     display: none;
 }
