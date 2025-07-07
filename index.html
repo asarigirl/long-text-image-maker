@@ -3,60 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超長文お気持ち投稿画像メーカー V3.1</title>
-
-    <!-- Google Fontsを読み込む（しっぽり明朝からNoto Serif JPに変更） -->
+    <title>超長文お気持ち投稿画像メーカー V4.0</title>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&family=Noto+Serif+JP&family=Yuji+Syuku&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&family=Dela+Gothic+One&family=DotGothic16&family=Hannari&family=Kaisei+Decol&family=Kosugi+Maru&family=M+PLUS+1p&family=M+PLUS+Rounded+1c&family=Mochiy+Pop+One&family=Nico+Moji&family=Nikukyu&family=Noto+Sans+JP&family=Noto+Serif+JP&family=Potta+One&family=RocknRoll+One&family=Sawarabi+Gothic&family=Sawarabi+Mincho&family=Shippori+Mincho+B1&family=Yuji+Mai&family=Yuji+Syuku&family=Yusei+Magic&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic&family=Zen+Old+Mincho&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome (アイコン用) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>超長文お気持ち投稿画像メーカー</h1>
-        <p>SNSの文字数制限を気にせず、熱いお気持ちを一枚の画像に！</p>
-        
-        <!-- カスタマイズ用のコントロールパネル -->
-        <div class="controls-grid">
-            <div>
-                <label for="font-family-select">フォント:</label>
-                <select id="font-family-select">
-                    <option value="BIZ UDPGothic">BIZ UDゴシック (標準)</option>
-                    <option value="Yuji Syuku">Yuji Syuku (お気持ち)</option>
-                    <option value="Noto Serif JP">Noto Serif JP (丁寧)</option>
-                </select>
-            </div>
-            <div>
-                <label for="font-size-input">文字サイズ (px):</label>
-                <input type="number" id="font-size-input" value="18" min="10" max="100">
-            </div>
-            <div>
-                <label for="line-height-input">行間 (倍):</label>
-                <input type="number" id="line-height-input" value="1.8" min="1" max="5" step="0.1">
-            </div>
-            <div>
-                <label for="letter-spacing-input">字間 (px):</label>
-                <input type="number" id="letter-spacing-input" value="0" min="-10" max="20">
-            </div>
-            <div>
-                <label for="bg-color-input">背景色:</label>
-                <input type="color" id="bg-color-input" value="#FFFFFF">
-            </div>
-            <div>
-                <label for="font-color-input">文字色:</label>
-                <input type="color" id="font-color-input" value="#000000">
+    <div class="main-wrapper">
+
+        <!-- 左カラム：コントロールパネル -->
+        <div class="control-column">
+            <h1>超長文お気持ち投稿画像メーカー</h1>
+            <p>設定とテキストを編集すると、右側にリアルタイムでプレビューが更新されます。</p>
+
+            <fieldset class="section-card">
+                <legend><i class="fas fa-paint-brush"></i> スタイル設定</legend>
+                <div class="controls-grid">
+                    <div>
+                        <label for="font-family-select"><i class="fas fa-font"></i> フォント:</label>
+                        <select id="font-family-select">
+                            <optgroup label="ゴシック体">
+                                <option value="BIZ UDPGothic">BIZ UDゴシック</option>
+                                <option value="Kosugi Maru">Kosugi Maru</option>
+                                <option value="M PLUS 1p">M PLUS 1p</option>
+                                <option value="M PLUS Rounded 1c">M PLUS Rounded 1c</option>
+                                <option value="Noto Sans JP">Noto Sans JP</option>
+                                <option value="Sawarabi Gothic">さわらびゴシック</option>
+                                <option value="Zen Kaku Gothic New">Zen角ゴシックNew</option>
+                                <option value="Zen Maru Gothic">Zen丸ゴシック</option>
+                            </optgroup>
+                            <optgroup label="明朝体">
+                                <option value="Hannari">はんなり明朝</option>
+                                <option value="Noto Serif JP">Noto Serif JP</option>
+                                <option value="Sawarabi Mincho">さわらび明朝</option>
+                                <option value="Shippori Mincho B1">しっぽり明朝 B1</option>
+                                <option value="Zen Old Mincho">Zen Old Mincho</option>
+                            </optgroup>
+                            <optgroup label="その他">
+                                <option value="Dela Gothic One">Dela Gothic One</option>
+                                <option value="DotGothic16">DotGothic16</option>
+                                <option value="Kaisei Decol">Kaisei Decol</option>
+                                <option value="Mochiy Pop One">Mochiy Pop One</option>
+                                <option value="Nico Moji">ニコモジ</option>
+                                <option value="Nikukyu">ニクキュウ</option>
+                                <option value="Potta One">Potta One</option>
+                                <option value="RocknRoll One">RocknRoll One</option>
+                                <option value="Yuji Mai">Yuji Mai</option>
+                                <option value="Yuji Syuku">Yuji Syuku</option>
+                                <option value="Yusei Magic">Yusei Magic</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="font-size-input"><i class="fas fa-text-height"></i> 文字サイズ (px):</label>
+                        <input type="number" id="font-size-input" value="16" min="10" max="100">
+                    </div>
+                    <div>
+                        <label for="line-height-input"><i class="fas fa-align-justify"></i> 行間 (倍):</label>
+                        <input type="number" id="line-height-input" value="1.1" min="1" max="5" step="0.1">
+                    </div>
+                    <div>
+                        <label for="letter-spacing-input"><i class="fas fa-text-width"></i> 字間 (px):</label>
+                        <input type="number" id="letter-spacing-input" value="0" min="-10" max="20">
+                    </div>
+                    <div>
+                        <label for="bg-color-input"><i class="fas fa-fill-drip"></i> 背景色:</label>
+                        <input type="color" id="bg-color-input" value="#FFFFFF">
+                    </div>
+                    <div>
+                        <label for="font-color-input"><i class="fas fa-palette"></i> 文字色:</label>
+                        <input type="color" id="font-color-input" value="#000000">
+                    </div>
+                    <div class="layout-control">
+                        <label for="layout-select"><i class="fas fa-ruler-combined"></i> レイアウト (文字数目安):</label>
+                        <select id="layout-select">
+                            <option value="800">スマホ最適 (〜40字)</option>
+                            <option value="1200">標準 (〜60字)</option>
+                            <option value="1600">ワイド (〜80字)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="reset-wrapper">
+                    <button id="reset-btn" title="すべての設定をデフォルトに戻します"><i class="fas fa-undo"></i> デフォルトに戻す</button>
+                </div>
+            </fieldset>
+
+            <fieldset class="section-card">
+                <legend><i class="fas fa-keyboard"></i> テキスト入力</legend>
+                <textarea id="text-input" rows="15" placeholder="ここに、あなたの伝えたい文章を貼り付けてください..."></textarea>
+            </fieldset>
+        </div>
+
+        <!-- 右カラム：プレビューエリア -->
+        <div class="preview-column">
+             <div id="result-area">
+                <p id="preview-prompt">ここにプレビューが表示されます。</p>
+                <img id="output-image" class="hidden" src="" alt="生成された画像">
+                <a id="download-btn" class="button hidden" download="omoi-image.png">
+                    <i class="fas fa-download"></i> 画像をダウンロード
+                </a>
             </div>
         </div>
 
-        <textarea id="text-input" rows="15" placeholder="ここに、あなたの伝えたい文章を貼り付けてください..."></textarea>
-        <button id="generate-btn">画像を出力する</button>
-
-        <div id="result-area" class="hidden">
-            <h2>完成！</h2>
-            <p>画像を右クリック（または長押し）して保存してください。</p>
-            <img id="output-image" src="" alt="生成された画像">
-        </div>
     </div>
     <script src="script.js"></script>
 </body>

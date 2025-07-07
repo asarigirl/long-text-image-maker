@@ -1,118 +1,119 @@
-// === V3.0 完成版 ===
+/* === Final Version (Classic Style & Structured Layout) === */
 
-// --- HTMLの要素をすべて取得 ---
-const textInput = document.getElementById('text-input');
-const generateBtn = document.getElementById('generate-btn');
-const resultArea = document.getElementById('result-area');
-const outputImage = document.getElementById('output-image');
-const fontFamilySelect = document.getElementById('font-family-select');
-const fontSizeInput = document.getElementById('font-size-input');
-const lineHeightInput = document.getElementById('line-height-input');
-const letterSpacingInput = document.getElementById('letter-spacing-input');
-const bgColorInput = document.getElementById('bg-color-input');
-const fontColorInput = document.getElementById('font-color-input');
-
-
-// --- ボタンがクリックされたときの処理 ---
-generateBtn.addEventListener('click', async () => {
-    const text = textInput.value;
-    if (text.trim() === "") {
-        alert("テキストを入力してください。");
-        return;
-    }
-
-    const selectedFont = `18px "${fontFamilySelect.value}"`;
-    try {
-        await document.fonts.load(selectedFont);
-    } catch (err) {
-        console.error("フォントの読み込みに失敗:", err);
-        alert("フォントの読み込みに失敗しました。時間をおいて再試行してください。");
-        return;
-    }
-
-    createImageFromText(text);
-});
-
-
-// --- テキストから画像を生成するメインの関数 ---
-function createImageFromText(text) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    // --- ユーザーが設定した値をすべて読み込む ---
-    const fontFamily = fontFamilySelect.value;
-    const fontSize = parseInt(fontSizeInput.value, 10);
-    const lineHeightMultiplier = parseFloat(lineHeightInput.value);
-    const letterSpacing = parseInt(letterSpacingInput.value, 10);
-    const bgColor = bgColorInput.value;
-    const fontColor = fontColorInput.value;
-    const lineHeight = fontSize * lineHeightMultiplier;
-    const fontName = `${fontSize}px "${fontFamily}"`;
-
-    // --- 画像の基本設定 ---
-    const imageWidth = 800;
-    const padding = 40;
-    const sidePadding = 50;
-
-    // --- まず、必要な高さを計算する ---
-    ctx.font = fontName;
-    ctx.letterSpacing = `${letterSpacing}px`;
-    const lines = getWrappedLines(ctx, text, imageWidth - sidePadding * 2);
-    const textHeight = lines.length * lineHeight;
-    const imageHeight = textHeight + padding * 2;
-
-    // --- 計算したサイズでキャンバスを再設定 ---
-    canvas.width = imageWidth;
-    canvas.height = imageHeight;
-
-    // --- キャンバスに描画する ---
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.font = fontName;
-    ctx.letterSpacing = `${letterSpacing}px`;
-    ctx.fillStyle = fontColor;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-
-    lines.forEach((line, index) => {
-        const x = sidePadding;
-        const y = padding + index * lineHeight;
-        ctx.fillText(line, x, y);
-    });
-
-    // --- 完成した画像を画面に表示 ---
-    outputImage.src = canvas.toDataURL('image/png');
-    resultArea.classList.remove('hidden');
-    
-    generateBtn.textContent = '画像を生成しました！';
-    setTimeout(() => { generateBtn.textContent = '画像を出力する'; }, 2000);
+:root {
+    --bg-color: #f0f2f5;
+    --container-bg: #ffffff;
+    --text-primary: #1a237e;
+    --text-secondary: #555555;
+    --button-bg: #28a745;
+    --button-hover-bg: #218838;
+    --border-color: #dddddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-
-// --- テキストを自動で折り返して、行の配列を返す関数 ---
-function getWrappedLines(ctx, text, maxWidth) {
-    const words = text.split('');
-    const lines = [];
-    let currentLine = '';
-
-    for (let i = 0; i < words.length; i++) {
-        const char = words[i];
-        if (char === '\n') {
-            lines.push(currentLine);
-            currentLine = '';
-            continue;
-        }
-        const testLine = currentLine + char;
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-        if (testWidth > maxWidth && i > 0) {
-            lines.push(currentLine);
-            currentLine = char;
-        } else {
-            currentLine = testLine;
-        }
-    }
-    lines.push(currentLine);
-    return lines;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+    color: var(--text-secondary);
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
+h1 { text-align: center; color: var(--text-primary); font-size: 2.2em; margin-bottom: 10px; }
+p { text-align: center; margin-bottom: 25px; }
+
+.section-card {
+    background: var(--container-bg);
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    margin-bottom: 25px;
+}
+.section-card legend {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--text-primary);
+    padding: 0 10px;
+    margin-left: 10px;
+}
+.section-card legend .fas { margin-right: 8px; }
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px 20px;
+}
+.controls-grid div { display: flex; flex-direction: column; }
+.controls-grid label { font-size: 14px; font-weight: 500; margin-bottom: 5px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+.controls-grid select, .controls-grid input {
+    width: 100%; box-sizing: border-box; padding: 8px;
+    border: 1px solid #ccc; border-radius: 4px; font-size: 16px;
+    height: 40px;
+}
+input[type="color"] { padding: 2px; height: 40px; }
+.layout-control { grid-column: 1 / -1; }
+
+.reset-wrapper { margin-top: 15px; text-align: right; }
+#reset-btn {
+    background: #999; font-size: 12px; padding: 5px 15px;
+    color: white; border: none; border-radius: 4px; cursor: pointer;
+}
+#reset-btn:hover { background: #777; }
+#reset-btn .fas { margin-right: 5px; }
+
+#generate-btn {
+    width: 100%; padding: 15px; font-size: 18px;
+    font-weight: bold; color: #fff; background-color: var(--button-bg);
+    border: none; border-radius: 4px; cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 20px;
+}
+#generate-btn:hover { background-color: var(--button-hover-bg); }
+
+textarea {
+    width: 100%; box-sizing: border-box; padding: 15px;
+    border-radius: 4px; font-size: 16px; line-height: 1.7;
+    border: 1px solid #ccc; resize: vertical; margin: 0; min-height: 250px;
+}
+
+#result-area { margin-top: 0; text-align: center; padding: 10px 0; }
+#result-area p { font-size: 14px; margin-bottom: 15px; color: #777; }
+#output-image { max-width: 100%; border: 1px solid var(--border-color); border-radius: 4px; }
+.hidden { display: none; }
+
+#download-btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--button-bg);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 20px;
+}
+#download-btn:hover { background-color: var(--button-hover-bg); }
+#download-btn .fas { margin-right: 8px; }
+
+.spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%;
+    border-top: 3px solid #fff; width: 20px; height: 20px;
+    animation: spin 1s linear infinite; display: inline-block;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
