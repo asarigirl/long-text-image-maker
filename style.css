@@ -1,4 +1,4 @@
-/* === V4.0 Split-View Interactive Studio === */
+/* === Final Version (Hybrid Engine & Split-View) === */
 :root {
     --bg-color: #f4f7f6;
     --control-panel-bg: #ffffff;
@@ -13,7 +13,7 @@
 html, body {
     height: 100%;
     margin: 0;
-    overflow: hidden; /* ページ全体のスクロールを禁止 */
+    overflow: hidden;
 }
 
 body {
@@ -29,7 +29,8 @@ body {
 }
 
 .control-column {
-    width: 420px;
+    width: 40%;
+    min-width: 420px;
     flex-shrink: 0;
     padding: 25px 30px;
     background-color: var(--control-panel-bg);
@@ -39,6 +40,7 @@ body {
 }
 
 .preview-column {
+    width: 60%;
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -70,16 +72,38 @@ h1 {
     background-color: #fff;
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-header legend,
 .section-card legend {
     font-size: 1em;
     font-weight: 600;
     color: var(--text-primary);
-    padding: 0 8px;
-    margin-left: 10px;
+    padding: 0;
+    margin: 0;
 }
+
+.section-header legend .fas,
 .section-card legend .fas {
     margin-right: 6px;
 }
+
+#generate-btn {
+    background: #6c757d;
+    font-size: 12px;
+    padding: 6px 12px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#generate-btn:hover { background: #5a6268; }
+#generate-btn .fas { margin-right: 5px; }
 
 .controls-grid {
     display: grid;
@@ -126,12 +150,8 @@ input[type="color"] {
     border-radius: 4px;
     cursor: pointer;
 }
-#reset-btn:hover {
-    background: #5a6268;
-}
-#reset-btn .fas {
-    margin-right: 5px;
-}
+#reset-btn:hover { background: #5a6268; }
+#reset-btn .fas { margin-right: 5px; }
 
 textarea {
     width: 100%;
@@ -173,32 +193,15 @@ textarea {
     transition: background-color 0.2s;
     margin-top: 20px;
 }
-#download-btn:hover {
-    background-color: var(--button-hover-bg);
-}
-#download-btn .fas {
-    margin-right: 8px;
-}
+#download-btn:hover { background-color: var(--button-hover-bg); }
+#download-btn .fas { margin-right: 8px; }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 /* レスポンシブ対応 */
 @media (max-width: 900px) {
-    .main-wrapper {
-        flex-direction: column;
-        height: auto;
-    }
-    .control-column {
-        width: 100%;
-        height: auto;
-        overflow-y: visible;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-    }
-    .preview-column {
-        height: auto;
-        padding: 20px;
-    }
+    html, body { height: auto; overflow: auto; }
+    .main-wrapper { flex-direction: column; height: auto; }
+    .control-column { width: 100%; min-width: unset; height: auto; overflow-y: visible; border-right: none; border-bottom: 1px solid var(--border-color); }
+    .preview-column { height: auto; padding: 20px; }
 }

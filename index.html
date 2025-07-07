@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超長文お気持ち投稿画像メーカー V4.0</title>
-    
-    <!-- Google Fonts -->
+    <title>超長文お気持ち投稿画像メーカー</title>
+
+    <!-- Google Fonts: 必要なすべてのフォントを読み込みます -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic&family=Dela+Gothic+One&family=DotGothic16&family=Hannari&family=Kaisei+Decol&family=Kosugi+Maru&family=M+PLUS+1p&family=M+PLUS+Rounded+1c&family=Mochiy+Pop+One&family=Nico+Moji&family=Nikukyu&family=Noto+Sans+JP&family=Noto+Serif+JP&family=Potta+One&family=RocknRoll+One&family=Sawarabi+Gothic&family=Sawarabi+Mincho&family=Shippori+Mincho+B1&family=Yuji+Mai&family=Yuji+Syuku&family=Yusei+Magic&family=Zen+Kaku+Gothic+New&family=Zen+Maru+Gothic&family=Zen+Old+Mincho&display=swap" rel="stylesheet">
@@ -96,7 +96,10 @@
             </fieldset>
 
             <fieldset class="section-card">
-                <legend><i class="fas fa-keyboard"></i> テキスト入力</legend>
+                <div class="section-header">
+                    <legend><i class="fas fa-keyboard"></i> テキスト入力</legend>
+                    <button id="generate-btn" title="現在の設定で画像を再生成します"><i class="fas fa-sync-alt"></i> 手動でプレビュー更新</button>
+                </div>
                 <textarea id="text-input" rows="15" placeholder="ここに、あなたの伝えたい文章を貼り付けてください..."></textarea>
             </fieldset>
         </div>

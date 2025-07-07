@@ -1,119 +1,158 @@
-/* === Final Version (Classic Style & Structured Layout) === */
+// === Final Version (Hybrid Engine & Split-View) ===
 
-:root {
-    --bg-color: #f0f2f5;
-    --container-bg: #ffffff;
-    --text-primary: #1a237e;
-    --text-secondary: #555555;
-    --button-bg: #28a745;
-    --button-hover-bg: #218838;
-    --border-color: #dddddd;
-    --shadow-color: rgba(0, 0, 0, 0.1);
+document.addEventListener('DOMContentLoaded', () => {
+    // --- 要素をすべて取得 ---
+    const textInput = document.getElementById('text-input');
+    const generateBtn = document.getElementById('generate-btn');
+    const outputImage = document.getElementById('output-image');
+    const downloadBtn = document.getElementById('download-btn');
+    const previewPrompt = document.getElementById('preview-prompt');
+    const controls = {
+        fontFamily: document.getElementById('font-family-select'),
+        fontSize: document.getElementById('font-size-input'),
+        lineHeight: document.getElementById('line-height-input'),
+        letterSpacing: document.getElementById('letter-spacing-input'),
+        bgColor: document.getElementById('bg-color-input'),
+        fontColor: document.getElementById('font-color-input'),
+        layout: document.getElementById('layout-select'),
+        resetBtn: document.getElementById('reset-btn'),
+    };
+    const defaultValues = {
+        fontFamily: 'Noto Sans JP',
+        fontSize: '16',
+        lineHeight: '1.1',
+        letterSpacing: '0',
+        bgColor: '#FFFFFF',
+        fontColor: '#000000',
+        layout: '800',
+    };
+
+    // --- イベントリスナーをまとめて設定 ---
+    const allControls = [textInput, controls.fontFamily, controls.fontSize, controls.lineHeight, controls.letterSpacing, controls.bgColor, controls.fontColor, controls.layout];
+    allControls.forEach(control => {
+        control.addEventListener('input', debouncedUpdate);
+    });
+    controls.resetBtn.addEventListener('click', resetToDefaults);
+    generateBtn.addEventListener('click', createImageFromText);
+
+    // --- 関数定義 ---
+    let debounceTimer;
+    function debouncedUpdate() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => createImageFromText(false), 300); // 自動更新時はスピナーなし
+    }
+
+    function resetToDefaults() {
+        controls.fontFamily.value = defaultValues.fontFamily;
+        controls.fontSize.value = defaultValues.fontSize;
+        controls.lineHeight.value = defaultValues.lineHeight;
+        controls.letterSpacing.value = defaultValues.letterSpacing;
+        controls.bgColor.value = defaultValues.bgColor;
+        controls.fontColor.value = defaultValues.fontColor;
+        controls.layout.value = defaultValues.layout;
+        debouncedUpdate();
+    }
+    
+    async function createImageFromText(isManualClick = true) {
+        const text = textInput.value;
+        if (text.trim() === "") {
+            outputImage.classList.add('hidden');
+            downloadBtn.classList.add('hidden');
+            previewPrompt.classList.remove('hidden');
+            return;
+        }
+
+        if (isManualClick) {
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<div class="spinner"></div>';
+        }
+
+        try {
+            await document.fonts.load(`18px "${controls.fontFamily.value}"`);
+        } catch (err) {
+            console.error("フォントの読み込みに失敗:", err);
+        }
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const fontFamily = controls.fontFamily.value;
+        const fontSize = parseInt(controls.fontSize.value, 10);
+        const lineHeightMultiplier = parseFloat(controls.lineHeight.value);
+        const letterSpacing = parseInt(controls.letterSpacing.value, 10);
+        const bgColor = controls.bgColor.value;
+        const fontColor = controls.fontColor.value;
+        const imageWidth = parseInt(controls.layout.value, 10);
+        const lineHeight = fontSize * lineHeightMultiplier;
+        const fontName = `${fontSize}px "${fontFamily}"`;
+        const padding = 50;
+        const sidePadding = 60;
+        
+        ctx.font = fontName;
+        ctx.letterSpacing = `${letterSpacing}px`;
+        const lines = getWrappedLines(ctx, text, imageWidth - sidePadding * 2);
+        const textHeight = lines.length * lineHeight;
+        const imageHeight = textHeight + (padding * 2);
+
+        canvas.width = imageWidth;
+        canvas.height = imageHeight > 0 ? imageHeight : 100;
+
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.font = fontName;
+        ctx.letterSpacing = `${letterSpacing}px`;
+        ctx.fillStyle = fontColor;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+
+        lines.forEach((line, index) => {
+            const x = sidePadding;
+            const y = padding + (index * lineHeight);
+            ctx.fillText(line, x, y);
+        });
+        
+        const imageUrl = canvas.toDataURL('image/png');
+        outputImage.src = imageUrl;
+        downloadBtn.href = imageUrl;
+        
+        outputImage.classList.remove('hidden');
+        downloadBtn.classList.remove('hidden');
+        previewPrompt.classList.add('hidden');
+        
+    } catch (err) {
+        console.error("画像生成中にエラー:", err);
+        alert("画像生成に失敗しました。");
+    } finally {
+        if (isManualClick) {
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<i class="fas fa-sync-alt"></i> 手動でプレビュー更新';
+        }
+    }
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-    color: var(--text-secondary);
-    background-color: var(--bg-color);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.container {
-    width: 100%;
-    max-width: 800px;
-    background: transparent;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-}
-
-h1 { text-align: center; color: var(--text-primary); font-size: 2.2em; margin-bottom: 10px; }
-p { text-align: center; margin-bottom: 25px; }
-
-.section-card {
-    background: var(--container-bg);
-    padding: 25px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    border: 1px solid var(--border-color);
-    margin-bottom: 25px;
-}
-.section-card legend {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: var(--text-primary);
-    padding: 0 10px;
-    margin-left: 10px;
-}
-.section-card legend .fas { margin-right: 8px; }
-
-.controls-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px 20px;
-}
-.controls-grid div { display: flex; flex-direction: column; }
-.controls-grid label { font-size: 14px; font-weight: 500; margin-bottom: 5px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
-.controls-grid select, .controls-grid input {
-    width: 100%; box-sizing: border-box; padding: 8px;
-    border: 1px solid #ccc; border-radius: 4px; font-size: 16px;
-    height: 40px;
-}
-input[type="color"] { padding: 2px; height: 40px; }
-.layout-control { grid-column: 1 / -1; }
-
-.reset-wrapper { margin-top: 15px; text-align: right; }
-#reset-btn {
-    background: #999; font-size: 12px; padding: 5px 15px;
-    color: white; border: none; border-radius: 4px; cursor: pointer;
-}
-#reset-btn:hover { background: #777; }
-#reset-btn .fas { margin-right: 5px; }
-
-#generate-btn {
-    width: 100%; padding: 15px; font-size: 18px;
-    font-weight: bold; color: #fff; background-color: var(--button-bg);
-    border: none; border-radius: 4px; cursor: pointer;
-    transition: background-color 0.2s;
-    margin-bottom: 20px;
-}
-#generate-btn:hover { background-color: var(--button-hover-bg); }
-
-textarea {
-    width: 100%; box-sizing: border-box; padding: 15px;
-    border-radius: 4px; font-size: 16px; line-height: 1.7;
-    border: 1px solid #ccc; resize: vertical; margin: 0; min-height: 250px;
-}
-
-#result-area { margin-top: 0; text-align: center; padding: 10px 0; }
-#result-area p { font-size: 14px; margin-bottom: 15px; color: #777; }
-#output-image { max-width: 100%; border: 1px solid var(--border-color); border-radius: 4px; }
-.hidden { display: none; }
-
-#download-btn {
-    display: inline-block;
-    text-decoration: none;
-    padding: 12px 30px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background-color: var(--button-bg);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 20px;
-}
-#download-btn:hover { background-color: var(--button-hover-bg); }
-#download-btn .fas { margin-right: 8px; }
-
-.spinner {
-    border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%;
-    border-top: 3px solid #fff; width: 20px; height: 20px;
-    animation: spin 1s linear infinite; display: inline-block;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    function getWrappedLines(ctx, text, maxWidth) {
+        const lines = [];
+        const paragraphs = text.split('\n');
+        paragraphs.forEach(paragraph => {
+            if (paragraph === "") {
+                lines.push("");
+                return;
+            }
+            let currentLine = '';
+            for (let i = 0; i < paragraph.length; i++) {
+                const char = paragraph[i];
+                const testLine = currentLine + char;
+                const metrics = ctx.measureText(testLine);
+                const testWidth = metrics.width;
+                if (testWidth > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = char;
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            lines.push(currentLine);
+        });
+        return lines;
+    }
+});
